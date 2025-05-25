@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Box, Button, Container, Paper, TextField, Typography, Divider, CircularProgress } from '@mui/material';
 
 const Chat: React.FC = () => {
   const [input, setInput] = useState('');
@@ -25,30 +26,48 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '2rem auto', fontFamily: 'sans-serif' }}>
-      <h2>AI Chatbot</h2>
-      <div style={{ minHeight: 200, border: '1px solid #ccc', padding: 10, marginBottom: 10 }}>
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        AI Chatbot
+      </Typography>
+      <Paper elevation={3} sx={{ minHeight: 200, p: 2, mb: 2 }}>
         {messages.map((msg, idx) => (
-          <div key={idx}>
-            <b>You:</b> {msg.user}
-            <br />
-            <b>Bot:</b> {msg.bot}
-            <hr />
-          </div>
+          <Box key={idx} sx={{ mb: 2 }}>
+            <Typography variant="subtitle2" color="primary">You:</Typography>
+            <Typography variant="body1" sx={{ mb: 1 }}>{msg.user}</Typography>
+            <Typography variant="subtitle2" color="secondary">Bot:</Typography>
+            <Typography variant="body1">{msg.bot}</Typography>
+            <Divider sx={{ mt: 2 }} />
+          </Box>
         ))}
-      </div>
-      <input
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && sendMessage()}
-        placeholder="Type your message..."
-        style={{ width: '80%', padding: 8 }}
-        disabled={loading}
-      />
-      <button onClick={sendMessage} disabled={loading || !input.trim()} style={{ padding: 8, marginLeft: 8 }}>
-        Send
-      </button>
-    </div>
+        {messages.length === 0 && (
+          <Typography color="text.secondary" align="center">
+            Start the conversation!
+          </Typography>
+        )}
+      </Paper>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <TextField
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && sendMessage()}
+          placeholder="Type your message..."
+          variant="outlined"
+          fullWidth
+          disabled={loading}
+          size="small"
+        />
+        <Button
+          onClick={sendMessage}
+          disabled={loading || !input.trim()}
+          variant="contained"
+          color="primary"
+          sx={{ ml: 2, minWidth: 90 }}
+        >
+          {loading ? <CircularProgress size={24} /> : 'Send'}
+        </Button>
+      </Box>
+    </Container>
   );
 };
 
